@@ -1,0 +1,183 @@
+directions = [[(-1, 0), (1, 0)],
+              [(0, -1), (0, 1)],
+              [(-1, -1), (1, 1)],
+              [(-1, 1), (1, -1)]]
+
+
+def make_matrix(rows: int, columns: int):
+    raw_matrix = [[" "] * rows for _ in range(columns)]
+    return raw_matrix
+
+
+def valid_number(minimum, maximum):
+    while True:
+        try:
+            number = int(input(f'number  in the range from {minimum} to {maximum}'))
+            if minimum <= number <= maximum:
+                return number
+            else:
+                print(f"The variable number must be in the range from {minimum} to {maximum}")
+        except ValueError:
+            print("The variable number must be an integer")
+
+
+def put_sign(number, player_sign):
+    if number <= 3:
+        x = 0
+        y = number - 1
+    elif number <= 6:
+        x = 1
+        y = number - 4
+    else:
+        x = 2
+        y = number - 7
+
+    if matrix[x][y] not in ['X', "O"]:
+        matrix[x][y] = player_sign
+    else:
+        print("This place is already taken. Please choose another!")
+        number = valid_number(1, 9)
+        put_sign(number, player_sign)
+
+
+player1 = input('please enter your name player_1: ')
+player2 = input('please enter your name player_2: ')
+
+
+def player_signs():
+    global player_1_sign, player_2_sign
+    while True:
+        input_sign = input(f'{player1.capitalize()} what sign do you wanna use \'X\' or \'O\'')
+        if input_sign.upper() not in ['X', 'O']:
+            print("The variable sign must be \'X\' or \'O\'")
+            continue
+        if input_sign.upper() == 'X':
+            player_1_sign = 'X'
+            player_2_sign = 'O'
+            return player_1_sign, player_2_sign
+        else:
+            player_1_sign = 'O'
+            player_2_sign = 'X'
+            return player_1_sign, player_2_sign
+
+
+def check_win():
+    if matrix[0][0] == 'X' and matrix[0][1] == 'X' and matrix[0][2] == 'X':
+        return player1
+    elif matrix[1][0] == 'X' and matrix[1][1] == 'X' and matrix[1][2] == 'X':
+        return player1
+    elif matrix[2][0] == 'X' and matrix[2][1] == 'X' and matrix[2][2] == 'X':
+        return player1
+    elif matrix[0][0] == 'X' and matrix[1][0] == 'X' and matrix[2][0] == 'X':
+        return player1
+    elif matrix[0][1] == 'X' and matrix[1][1] == 'X' and matrix[2][1] == 'X':
+        return player1
+    elif matrix[0][2] == 'X' and matrix[1][2] == 'X' and matrix[2][2] == 'X':
+        return player1
+    elif matrix[0][0] == 'X' and matrix[1][1] == 'X' and matrix[2][2] == 'X':
+        return player1
+    elif matrix[0][2] == 'X' and matrix[1][1] == 'X' and matrix[2][0] == 'X':
+        return player1
+    elif matrix[0][0] == 'O' and matrix[0][1] == 'O' and matrix[0][2] == 'O':
+        return player2
+    elif matrix[1][0] == 'O' and matrix[1][1] == 'O' and matrix[1][2] == 'O':
+        return player2
+    elif matrix[2][0] == 'O' and matrix[2][1] == 'O' and matrix[2][2] == 'O':
+        return player2
+    elif matrix[0][0] == 'O' and matrix[1][0] == 'O' and matrix[2][0] == 'O':
+        return player2
+    elif matrix[0][1] == 'O' and matrix[1][1] == 'O' and matrix[2][1] == 'O':
+        return player2
+    elif matrix[0][2] == 'O' and matrix[1][2] == 'O' and matrix[2][2] == 'O':
+        return player2
+    elif matrix[0][0] == 'O' and matrix[1][1] == 'O' and matrix[2][2] == 'O':
+        return player2
+    elif matrix[0][2] == 'O' and matrix[1][1] == 'O' and matrix[2][0] == 'O':
+        return player2
+    else:
+        return False
+
+
+def check_win_connect_4(x, y, player):
+    for direction in directions:
+        single_direction_matches = 0
+        for turn in direction:
+            turn_x = x
+            turn_y = y
+            while True:
+                new_x = turn[0] + turn_x
+                new_y = turn[1] + turn_y
+                if 0 <= new_x < 7 and 0 <= new_y < 7 and matrix[new_x][new_y] == player:
+                    single_direction_matches += 1
+                    if single_direction_matches == 3:
+                        show_matrix(7)
+                        if player_1_sign == player:
+                            print(f'{player1} win!')
+                        else:
+                            print(f'{player2} win!')
+                        quit()
+
+                    turn_x = new_x
+                    turn_y = new_y
+                else:
+                    break
+
+
+def connect_4_put_sign(position, player):
+    for _ in range(7):
+        turn = matrix[_][position - 1]
+        if turn in ['X', 'O']:
+            if _ - 1 >= 0:
+                matrix[_ - 1][position - 1] = player
+                check_win_connect_4(_ - 1, position - 1, player)
+                break
+            else:
+                print("This column is already taken. Please choose another!")
+                number = valid_number(1, 7)
+                connect_4_put_sign(number, player)
+    else:
+        matrix[6][position - 1] = player
+
+
+def show_matrix(rows):
+    for _ in range(rows):
+        print(f"|  {'  |  '.join(matrix[_])}  |")
+
+
+player_1_sign, player_2_sign = player_signs()
+
+
+def main_tic_tac_toe():
+    show_matrix(3)
+    for i in range(9):
+        number = valid_number(1, 9)
+        if i % 2 == 0:
+
+            put_sign(number, player_1_sign)
+
+        else:
+            put_sign(number, player_2_sign)
+        show_matrix(3)
+        result = check_win()
+        if result:
+            print('Winner is', result, ' !')
+            quit()
+
+
+def main_connect_4():
+    for i in range(49):
+        number = valid_number(1, 7)
+        if i % 2 == 0:
+            connect_4_put_sign(number, player_1_sign)
+        else:
+            connect_4_put_sign(number, player_2_sign)
+        show_matrix(7)
+
+
+mode = input('choose mode connect_4 or tic_tac_toe: ')
+if mode == 'connect_4':
+    matrix = make_matrix(7, 7)
+    main_connect_4()
+else:
+    matrix = make_matrix(3, 3)
+    main_tic_tac_toe()
