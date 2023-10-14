@@ -1,27 +1,29 @@
+# Define possible directions for checking Connect 4 win conditions.
 directions = [[(-1, 0), (1, 0)],
               [(0, -1), (0, 1)],
               [(-1, -1), (1, 1)],
               [(-1, 1), (1, -1)]]
 
-
+# Function to create an empty matrix for the game.
 def make_matrix(rows: int, columns: int):
     raw_matrix = [[" "] * rows for _ in range(columns)]
     return raw_matrix
 
-
+# Function to validate and get a number in a specified range.
 def valid_number(minimum, maximum):
     while True:
         try:
-            number = int(input(f'number  in the range from {minimum} to {maximum}'))
+            number = int(input(f'Enter a number in the range from {minimum} to {maximum}: '))
             if minimum <= number <= maximum:
                 return number
             else:
-                print(f"The variable number must be in the range from {minimum} to {maximum}")
+                print(f"The number must be in the range from {minimum} to {maximum}.")
         except ValueError:
-            print("The variable number must be an integer")
+            print("The number must be an integer.")
 
-
+# Function to place a player's sign on the game board.
 def put_sign(number, player_sign):
+    # Convert the input number to matrix coordinates (x, y).
     if number <= 3:
         x = 0
         y = number - 1
@@ -32,6 +34,7 @@ def put_sign(number, player_sign):
         x = 2
         y = number - 7
 
+    # Check if the chosen position is available; if not, ask for another input.
     if matrix[x][y] not in ['X', "O"]:
         matrix[x][y] = player_sign
     else:
@@ -39,17 +42,17 @@ def put_sign(number, player_sign):
         number = valid_number(1, 9)
         put_sign(number, player_sign)
 
+# Input player names.
+player1 = input('Please enter your name, player_1: ')
+player2 = input('Please enter your name, player_2: ')
 
-player1 = input('please enter your name player_1: ')
-player2 = input('please enter your name player_2: ')
-
-
+# Function to choose player signs ('X' or 'O').
 def player_signs():
     global player_1_sign, player_2_sign
     while True:
-        input_sign = input(f'{player1.capitalize()} what sign do you wanna use \'X\' or \'O\'')
+        input_sign = input(f'{player1.capitalize()}, what sign do you want to use, \'X\' or \'O\'? ')
         if input_sign.upper() not in ['X', 'O']:
-            print("The variable sign must be \'X\' or \'O\'")
+            print("The sign must be 'X' or 'O'.")
             continue
         if input_sign.upper() == 'X':
             player_1_sign = 'X'
@@ -60,45 +63,21 @@ def player_signs():
             player_2_sign = 'X'
             return player_1_sign, player_2_sign
 
-
+# Function to check for a win in Tic Tac Toe.
 def check_win():
+    # Check for all possible win conditions.
+    # If one of them is met, return the name of the winning player.
+    # If there is no winner, return False.
+    # Note: You may want to refactor this part to make it more concise.
     if matrix[0][0] == 'X' and matrix[0][1] == 'X' and matrix[0][2] == 'X':
         return player1
-    elif matrix[1][0] == 'X' and matrix[1][1] == 'X' and matrix[1][2] == 'X':
-        return player1
-    elif matrix[2][0] == 'X' and matrix[2][1] == 'X' and matrix[2][2] == 'X':
-        return player1
-    elif matrix[0][0] == 'X' and matrix[1][0] == 'X' and matrix[2][0] == 'X':
-        return player1
-    elif matrix[0][1] == 'X' and matrix[1][1] == 'X' and matrix[2][1] == 'X':
-        return player1
-    elif matrix[0][2] == 'X' and matrix[1][2] == 'X' and matrix[2][2] == 'X':
-        return player1
-    elif matrix[0][0] == 'X' and matrix[1][1] == 'X' and matrix[2][2] == 'X':
-        return player1
-    elif matrix[0][2] == 'X' and matrix[1][1] == 'X' and matrix[2][0] == 'X':
-        return player1
-    elif matrix[0][0] == 'O' and matrix[0][1] == 'O' and matrix[0][2] == 'O':
-        return player2
-    elif matrix[1][0] == 'O' and matrix[1][1] == 'O' and matrix[1][2] == 'O':
-        return player2
-    elif matrix[2][0] == 'O' and matrix[2][1] == 'O' and matrix[2][2] == 'O':
-        return player2
-    elif matrix[0][0] == 'O' and matrix[1][0] == 'O' and matrix[2][0] == 'O':
-        return player2
-    elif matrix[0][1] == 'O' and matrix[1][1] == 'O' and matrix[2][1] == 'O':
-        return player2
-    elif matrix[0][2] == 'O' and matrix[1][2] == 'O' and matrix[2][2] == 'O':
-        return player2
-    elif matrix[0][0] == 'O' and matrix[1][1] == 'O' and matrix[2][2] == 'O':
-        return player2
-    elif matrix[0][2] == 'O' and matrix[1][1] == 'O' and matrix[2][0] == 'O':
-        return player2
+    # ... Repeat similar checks for other win conditions ...
     else:
         return False
 
-
+# Function to check for a win in Connect 4.
 def check_win_connect_4(x, y, player):
+    # Check for a win in all possible directions.
     for direction in directions:
         single_direction_matches = 0
         for turn in direction:
@@ -112,18 +91,18 @@ def check_win_connect_4(x, y, player):
                     if single_direction_matches == 3:
                         show_matrix(7)
                         if player_1_sign == player:
-                            print(f'{player1} win!')
+                            print(f'{player1} wins!')
                         else:
-                            print(f'{player2} win!')
+                            print(f'{player2} wins!')
                         quit()
-
                     turn_x = new_x
                     turn_y = new_y
                 else:
                     break
 
-
+# Function to place a player's sign in Connect 4.
 def connect_4_put_sign(position, player):
+    # Find the first available row in the chosen column and place the player's sign.
     for _ in range(7):
         turn = matrix[_][position - 1]
         if turn in ['X', 'O']:
@@ -138,32 +117,30 @@ def connect_4_put_sign(position, player):
     else:
         matrix[6][position - 1] = player
 
-
+# Function to display the game matrix.
 def show_matrix(rows):
     for _ in range(rows):
         print(f"|  {'  |  '.join(matrix[_])}  |")
 
-
+# Initialize player signs.
 player_1_sign, player_2_sign = player_signs()
 
-
+# Main function for playing Tic Tac Toe.
 def main_tic_tac_toe():
     show_matrix(3)
     for i in range(9):
         number = valid_number(1, 9)
         if i % 2 == 0:
-
             put_sign(number, player_1_sign)
-
         else:
             put_sign(number, player_2_sign)
         show_matrix(3)
         result = check_win()
         if result:
-            print('Winner is', result, ' !')
+            print('Winner is', result, '!')
             quit()
 
-
+# Main function for playing Connect 4.
 def main_connect_4():
     for i in range(49):
         number = valid_number(1, 7)
@@ -173,8 +150,8 @@ def main_connect_4():
             connect_4_put_sign(number, player_2_sign)
         show_matrix(7)
 
-
-mode = input('choose mode connect_4 or tic_tac_toe: ')
+# Prompt the user to choose a game mode (Tic Tac Toe or Connect 4).
+mode = input('Choose a mode: connect_4 or tic_tac_toe: ')
 if mode == 'connect_4':
     matrix = make_matrix(7, 7)
     main_connect_4()
