@@ -1,62 +1,29 @@
+# Import the random module for generating random characters
 from random import *
+
+# Import the os module for clearing the screen
 import os
+
+# Prompt the user to enter a password
 u_pwd = input('Enter password: ')
-pwd = ['a','b','c']
+
+# Define a list of characters to generate the password
+pwd = ['a', 'b', 'c']
+
+# Initialize a variable to store the generated password
 pw = ''
-while(pw!=u_pwd):
+
+# Continue the loop until the generated password matches the user's input
+while pw != u_pwd:
+    # Reset the generated password
     pw = ''
+    
+    # Generate a password character for each character in the user's input
     for letter in range(len(u_pwd)):
-        gues_pwd = pwd[randint(0,30)]
-        pw = str(gues_pwd)+str(pw)
-        print(pw)
-        print('Cracking Password... Please wait')
-print("Your Password is : ",pw)
+        gues_pwd = pwd[randint(0, 2)]  # Generate a random character from the 'pwd' list
+        pw = str(gues_pwd) + str(pw)  # Add the generated character to the password
+        print(pw)  # Print the current progress of the generated password
+        print('Cracking Password... Please wait')  # Display a message indicating password cracking progress
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-''''
-from collections import deque
-
-duck1 = 0
-duck2 = 0
-duck3 = 0
-duck4 = 0
-
-time = deque(list(map(int, input().split())))
-tasks = list(map(int, input().split()))
-
-while time and tasks:
-    pearson_time = time.popleft()
-    task = tasks.pop()
-    result = pearson_time * task
-    if 0 <= result <= 60:
-        duck1 += 1
-    elif 61 <= result <= 120:
-        duck2 += 1
-    elif 121 <= result <= 180:
-        duck3 += 1
-    elif 181 <= result <= 240:
-        duck4 += 1
-    else:
-        time.append(pearson_time)
-        tasks.append(task - 2)
-    if not tasks:
-        print("Congratulations, all tasks have been completed! Rubber ducks rewarded:")
-
-print(
-    f"Darth Vader Ducky: {duck1}\nThor Ducky: {duck2}\nBig Blue Rubber Ducky: {duck3}\nSmall Yellow Rubber Ducky: {duck4}")
-
-'''
+# When the loop exits, the generated password matches the user's input
+print("Your Password is : ", pw)  # Display the generated password
