@@ -1,0 +1,62 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>  <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Table</title>
+  </head>
+  <body>
+  
+  <table border="1">
+    <thead>
+      <tr>
+        <th></th>
+        <th>PRODUCT</th>
+        <th>GRAMS</th>
+        <th>COST</th>
+        <th>COST( X g)</th> 
+        <th>PROTEIN(100g)</th>
+        <th>CAL(100g)</th>
+        <th>Update Grams</th>
+      </tr>
+    </thead>
+    <tbody id="product-table-body">
+      <!-- Table rows will be dynamically added here -->
+    </tbody>
+  </table>
+  
+  <h2>Cloned Product Table</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th></th>
+        <th>PRODUCT</th>
+        <th>GRAMS</th>
+        <th>COST</th>
+        <th>COST( X g)</th> 
+        <th>PROTEIN(100g)</th>
+        <th>CAL(100g)</th>
+      </tr>
+    </thead>
+    <tbody id="cloned-product-table-body">
+      <!-- Cloned table rows will be dynamically added here -->
+    </tbody>
+  </table>
+  <h2>Totals</h2>
+<table border="1">
+  <thead>
+    <tr id="totals-row">
+      <th>Total</th>
+      <th></th>
+      <th></th>
+      <th id="total-cost"></th>
+      <th id="total-protein"></th>
+      <th id="total-cal"></th>
+    </tr>
+  </thead>
+</table>
+ 
+  <script src=""></script>
+  </body>
+  </html>
+  
