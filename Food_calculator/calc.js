@@ -1,21 +1,3 @@
-var products = {
-    '1': {
-        'PRODUCT': 'nutsTAHIN',
-        'GRAMS': 350,
-        'COST': 5.80,
-        'PROTEIN(100g)': 30,
-        'CAL(100g)': 650,
-    },
-    '2': {
-      'PRODUCT': 'afawf',
-      'GRAMS': 250,
-      'COST': 4.80,
-      'PROTEIN(100g)': 10,
-      'CAL(100g)': 350,
-  }
-};
-
-
 function createProductRows(products) {
     var tableBody = document.getElementById("product-table-body");
     
@@ -23,10 +5,8 @@ function createProductRows(products) {
         if (products.hasOwnProperty(key)) {
             var product = products[key];
             
-            // Create new row
             var newRow = document.createElement("tr");
             
-            // Create checkbox column
             var checkboxCell = document.createElement("td");
             var checkbox = document.createElement("input");
             checkbox.type = "checkbox";
@@ -39,7 +19,6 @@ function createProductRows(products) {
             checkboxCell.appendChild(checkbox);
             newRow.appendChild(checkboxCell);
             
-            // Fill other columns
             var columns = ["PRODUCT", "GRAMS", "COST", "COST( X g)", "PROTEIN(100g)", "CAL(100g)"];
             columns.forEach(function(column) {
                 var cell = document.createElement("td");
@@ -47,7 +26,6 @@ function createProductRows(products) {
                 newRow.appendChild(cell);
             });
             
-            // Create form for new grams input
             var formCell = document.createElement("td");
             var gramsInput = document.createElement("input");
             gramsInput.type = "number";
@@ -60,8 +38,7 @@ function createProductRows(products) {
             formCell.appendChild(gramsInput);
             newRow.appendChild(formCell);
             
-            // Append row to table body
-            newRow.dataset.productIndex = key; // Store the product index as a data attribute
+            newRow.dataset.productIndex = key; 
             tableBody.appendChild(newRow);
         }
     }
@@ -94,34 +71,36 @@ function calculateSums() {
     var totalCost = 0;
     var totalProtein = 0;
     var totalCal = 0;
+    var totalGrams = 0;
 
     for (var i = 0; i < clonedRows.length; i++) {
         var cells = clonedRows[i].getElementsByTagName("td");
         totalCost += parseFloat(cells[4].textContent);
         totalProtein += parseFloat(cells[5].textContent);
         totalCal += parseFloat(cells[6].textContent);
+
+        var gramsInput = cells[7].querySelector("input[type='number']");
+        if (gramsInput) {
+            totalGrams += parseFloat(gramsInput.value) || 0;
+        }
     }
-
-    // Update the sum values in the totals row
-    var totalsRow = document.getElementById("totals-row");
-    totalsRow.cells[3].textContent = totalCost.toFixed(2);
-    totalsRow.cells[4].textContent = totalProtein.toFixed(2);
-    totalsRow.cells[5].textContent = totalCal.toFixed(2);
-}
-
-// Call calculateSums whenever a row is cloned
+       var totalsRow = document.getElementById("totals-row");
+    totalsRow.cells[2].textContent = totalCost.toFixed(2);
+    totalsRow.cells[3].textContent = totalProtein.toFixed(2);
+    totalsRow.cells[4].textContent = totalCal.toFixed(2);
+    totalsRow.cells[5].textContent = totalGrams;
+  }
 function cloneRow(row) {
     var newRow = row.cloneNode(true);
     var newTableBody = document.getElementById("cloned-product-table-body");
 
-    // Add delete button
     var deleteButtonCell = document.createElement("td");
     var deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.classList.add("delete-button");
     deleteButton.addEventListener("click", function() {
         newTableBody.removeChild(newRow);
-        calculateSums(); // Recalculate sums after deletion
+        calculateSums();
     });
     deleteButtonCell.appendChild(deleteButton);
     newRow.appendChild(deleteButtonCell);
@@ -129,4 +108,22 @@ function cloneRow(row) {
     newTableBody.appendChild(newRow);
     calculateSums();
 }
+
+var products = {
+    '1': {
+        'PRODUCT': 'nutsTAHAN',
+        'GRAMS': 350,
+        'COST': 5.80,
+        'PROTEIN(100g)': 30,
+        'CAL(100g)': 650,
+    },
+    '2': {
+      'PRODUCT': 'Coconuts',
+      'GRAMS': 250,
+      'COST': 4.80,
+      'PROTEIN(100g)': 10,
+      'CAL(100g)': 350,
+  }
+};
+
 createProductRows(products);
